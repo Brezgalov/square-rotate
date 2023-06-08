@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Rotate</title>
+        <style>
+            .a {
+                position: absolute;
+                top: 200px;
+                left: 300;
+                display: block;
+                width: 50px;
+                height: 50px;
+                border-top: 3px solid black;
+                background: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="o-1" class="a"></div>
+        <script>
+            const body = document.getElementsByTagName('body')[0];
+            body.addEventListener('mousemove', function(event) {
+                let element = document.getElementById("o-1");
+                let center = {
+                    x: 325, // element position changes during rotation
+                    y: 225  // static position required to perform rotation
+                };
+                let yAxis = center.y;
+                let target = {x: event.clientX, y: event.clientY};
+                let virtual = {x: center.x, y: 0}
+
+                let b = length(center.x, center.y, virtual.x, virtual.y);
+                let c = length(center.x, center.y, target.x, target.y);
+                let a = length(virtual.x, virtual.y, target.x, target.y);
+
+                let cosA = (b*b + c*c - a*a) / (2 * b * c);
+                let rads = Math.acos(cosA);
+                let deg = (rads * 180 / Math.PI).toFixed(3);
+
+                let resultRotationDeg = 0;
+                if (target.x > center.x) {
+                    resultRotationDeg = deg;
+                } else {
+                    resultRotationDeg = 360 - deg;
+                }
+
+                element.style["transform"] = "rotate(" + (resultRotationDeg) + "deg)";
+            });
+
+            function length(x1, y1, x2, y2) {
+                return Math.sqrt(Math.pow((x1 - x2),2) + Math.pow((y1 - y2),2)).toFixed(3);
+            }
+        </script>
+    </body>
+</html>
